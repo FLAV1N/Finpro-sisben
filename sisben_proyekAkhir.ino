@@ -1,17 +1,23 @@
+// Mengimpor liblary yang diperlukan
 #include "WiFi.h"
 #include "ESPAsyncWebServer.h"
 #include <Adafruit_Sensor.h>
 #include <DHT.h>
 
+// Menginisiasi wifi
 const char* ssid = "LARON GAMING";
 const char* password = "ARDRA4404";
 
+// Menginisiasi sensor DHT22 pada pin digital 5
 #define DHTPIN 5
 #define DHTTYPE DHT22
 
 DHT dht(DHTPIN, DHTTYPE);
+
+// Menginisiasi web server pada port 80
 AsyncWebServer server(80);
 
+// Menginisiasi nilai awal
 float minTemp = 1000;
 float maxTemp = -1000;
 float totalTemp = 0;
@@ -23,16 +29,22 @@ float totalHum = 0;
 int countHum = 0;
 
 String readDHTTemperature() {
+  // Membaca temperatur dengan satuan celcius
   float t = dht.readTemperature();
+  // Mengecek jika gagal membaca temperatur dari sensor dan keluar dari loop
   if (isnan(t)) {    
     Serial.println("Gagal membaca data dari sensor DHT!");
     return "--";
   }
   else {
     Serial.println(t);
+    // Mengecek apakah temperatur yang terbaca kurang dari minHum, jika iya minTemp di set menjadi kelembaban saat ini.
     if(t < minTemp) minTemp = t;
+    // Mengecek apakah temperatur yang terbaca lebih dari maxHum, jika iya maxTemp di set menjadi kelembaban saat ini.
     if(t > maxTemp) maxTemp = t;
+    // Mentotalkan temperatur
     totalTemp += t;
+    // Banyaknya temperatur yang sudah terbaca
     countTemp++;
     return String(t);
   }
@@ -46,9 +58,13 @@ String readDHTHumidity() {
   }
   else {
     Serial.println(h);
+    // Mengecek apakah kelembaban yang terbaca kurang dari minHum, jika iya minHum di set menjadi kelembaban saat ini.
     if(h < minHum) minHum = h;
+    // Mengecek apakah kelembaban yang terbaca lebih dari maxHum, jika iya maxHum di set menjadi kelembaban saat ini.
     if(h > maxHum) maxHum = h;
+    // Mentotalkan kelembaban
     totalHum += h;
+    // Banyaknya kelembaban yang sudah terbaca
     countHum++;
     return String(h);
   }
@@ -224,7 +240,7 @@ const char index_html[] PROGMEM = R"rawliteral(
   </script>
   </html>)rawliteral";
 
-// Replaces placeholder with DHT values
+// Merubah nilai placeholder menjadi nilai yang sebenarnya
 String processor(const String& var){
   //Serial.println(var);
   if(var == "TEMPERATURE"){
@@ -255,22 +271,22 @@ String processor(const String& var){
 }
 
 void setup(){
-  // Serial port for debugging purposes
+  // Inisiasi port serial untuk menampilkan console esp32 di komputer
   Serial.begin(115200);
 
   dht.begin();
   
-  // Connect to Wi-Fi
+  // Fungsi konek ke wifi
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(1000);
     Serial.println("Connecting to WiFi..");
   }
 
-  // Print ESP32 Local IP Address
+  // Mengeprint IP ESP32 di consol
   Serial.println(WiFi.localIP());
 
-  // Route for root / web page
+  // Rute untuk root/halaman web
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
     request->send_P(200, "text/html", index_html, processor);
   });
@@ -299,7 +315,7 @@ void setup(){
     request->send_P(200, "text/plain", String(totalHum/countHum).c_str());
   });
 
-  // Start server
+  // Memulai server
   server.begin();
 }
  
