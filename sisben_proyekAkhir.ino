@@ -31,7 +31,7 @@ int countHum = 0;
 String readDHTTemperature() {
   // Membaca temperatur dengan satuan celcius
   float t = dht.readTemperature();
-  // Mengecek jika gagal membaca temperatur dari sensor dan keluar dari loop
+  // Mengecek jika gagal membaca temperatur dari sensor, program akan keluar dari loop
   if (isnan(t)) {    
     Serial.println("Gagal membaca data dari sensor DHT!");
     return "--";
@@ -52,6 +52,7 @@ String readDHTTemperature() {
 
 String readDHTHumidity() {
   float h = dht.readHumidity();
+  // Mengecek jika gagal membaca kelembapan dari sensor, program akan keluar dari loop
   if (isnan(h)) {
     Serial.println("Gagal membaca data dari sensor DHT!");
     return "--";
