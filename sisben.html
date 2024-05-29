@@ -1,0 +1,168 @@
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js" integrity="sha512-L0Shl7nXXzIlBSUUPpxrokqq4ojqgZFQczTYlGjzONGTDAcLremjwaWv5A+EDLnxhQzY5xUZPWLOLqYRkY0Cbw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type = "text/JavaScript" src = " https://MomentJS.com/downloads/moment.js"></script>
+    <style>
+      html {
+       font-family: Arial;
+       display: inline-block;
+       margin: 0px auto;
+       text-align: center;
+      }
+    h1 {
+    font-size:4em;
+    }
+    h2 {
+    font-size:2em;
+    }
+    h3 {
+    font-size:1em;
+    }
+    h4 {
+    font-size:0.5em;
+    }
+      p { font-size: 3.0rem; }
+      .units { font-size: 1.2rem; }
+      .dht-labels{
+        /* font-size: 3.5rem; */
+        vertical-align:middle;
+        padding-bottom: 15px;
+      }
+      .angka{
+        font-size: 3.1rem;
+        vertical-align:middle;
+      }
+      .angka-kecil{
+        font-size: 1.3rem;
+        vertical-align:middle;
+      }
+      .units-kecil { 
+        font-size: 0.8rem; 
+        vertical-align:middle;
+    }
+    </style>
+  </head>
+  <body>
+    <h1>ESP32 DHT Server</h1>
+      <h2>
+        <i class="fas fa-thermometer-half" style="color:#059e8a;"></i> 
+        <span class="dht-labels">Suhu: </span> 
+        <span class="angka" id="temperature">%TEMPERATURE%</span>
+        <sup class="units">&deg;C</sup>
+        </h2>
+    <h3><i class="fas fa-temperature-low" style="color: #006eff;"></i> 
+      <span class="dht-labels">Min: </span><span class="angka-kecil" id="minTemperature">%MINTEMPERATURE%</span><sup class="units-kecil">&deg;C</sup> 
+      <i class="fas fa-temperature-high" style="color: #ff0000;"></i> 
+      <span class="dht-labels">Max: </span><span class="angka-kecil" id="maxTemperature">%MAXTEMPERATURE%</span><sup class="units-kecil">&deg;C</sup> 
+      <i class="fas fa-thermometer-three-quarters" style="color:#00FD27;"></i> 
+      <span class="dht-labels">Avg: </span><span class="angka-kecil" id="avgTemperature">%AVGTEMPERATURE%</span><sup class="units-kecil">&deg;C</sup> 
+      </h3>
+    </br>
+    <h2>
+      <i class="ri-water-percent-fill" style="color:#00add6;"></i> 
+      <span class="dht-labels">Kelembapan: </span>
+      <span class="angka" id="humidity">%HUMIDITY%</span>
+      <sup class="units">&#37;</sup>
+      </h2>
+    <h3>
+      <i class="ri-drop-line" style="color: #006eff;"></i> 
+      <span class="dht-labels">Min: </span><span class="angka-kecil" id="minHumidity">%MINHUMIDITY%</span><sup class="units-kecil">&#37;</sup> 
+      <i class="ri-drop-fill" style="color: #ff0000;"></i> 
+      <span class="dht-labels">Max: </span><span class="angka-kecil" id="maxHumidity">%MAXHUMIDITY%</span><sup class="units-kecil">&#37;</sup> 
+      <i class="ri-contrast-drop-2-fill" style="color:#00FD27"></i> 
+      <span class="dht-labels">Avg: </span><span class="angka-kecil" id="avgHumidity">%AVGHUMIDITY%</span><sup class="units-kecil">&#37;</sup> 
+      </h3>
+    </br>
+  </body>
+  <script>
+  setInterval(function ( ) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        document.getElementById("temperature").innerHTML = this.responseText;
+      }
+    };
+    xhttp.open("GET", "/temperature", true);
+    xhttp.send();
+  }, 10000 ) ;
+  
+  setInterval(function ( ) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        document.getElementById("humidity").innerHTML = this.responseText;
+      }
+    };
+    xhttp.open("GET", "/humidity", true);
+    xhttp.send();
+  }, 10000 ) ;
+
+  setInterval(function ( ) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        document.getElementById("minTemperature").innerHTML = this.responseText;
+      }
+    };
+    xhttp.open("GET", "/mintemp", true);
+    xhttp.send();
+  }, 10000 ) ;
+
+  setInterval(function ( ) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        document.getElementById("maxTemperature").innerHTML = this.responseText;
+      }
+    };
+    xhttp.open("GET", "/maxtemp", true);
+    xhttp.send();
+  }, 10000 ) ;
+
+  setInterval(function ( ) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        document.getElementById("avgTemperature").innerHTML = this.responseText;
+      }
+    };
+    xhttp.open("GET", "/avgtemp", true);
+    xhttp.send();
+  }, 10000 ) ;
+
+  setInterval(function ( ) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        document.getElementById("minHumidity").innerHTML = this.responseText;
+      }
+    };
+    xhttp.open("GET", "/minhum", true);
+    xhttp.send();
+  }, 10000 ) ;
+
+  setInterval(function ( ) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        document.getElementById("maxHumidity").innerHTML = this.responseText;
+      }
+    };
+    xhttp.open("GET", "/maxhum", true);
+    xhttp.send();
+  }, 10000 ) ;
+
+  setInterval(function ( ) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        document.getElementById("avgHumidity").innerHTML = this.responseText;
+      }
+    };
+    xhttp.open("GET", "/avghum", true);
+    xhttp.send();
+  }, 10000 ) ;
+  </script>
+  </html>
