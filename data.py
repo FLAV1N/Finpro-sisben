@@ -23,7 +23,7 @@ def main():  # Fungsi utama
             ]
             writer.writerow(data)  # Menulis data ke file CSV
             f.flush()  # Memastikan data ditulis ke file segera
-            time.sleep(2)  # Menunggu 2 detik
+            time.sleep(60)  # Menunggu 60 detik atau 1 menit
             print("Saved!")  # Mencetak pesan "Saved!"
 
 if __name__ == "__main__":
