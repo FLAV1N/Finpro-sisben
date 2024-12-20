@@ -5,8 +5,8 @@
 #include <DHT.h>
 
 // Menginisiasi wifi
-const char* ssid = "LARON GAMING";
-const char* password = "ARDRA4404";
+const char* ssid = "REDACTED";
+const char* password = "REDACTED";
 
 // Menginisiasi sensor DHT22 pada pin digital 5
 #define DHTPIN 5
